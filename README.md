@@ -21,11 +21,16 @@ If you use this software in published work, please cite:
 Disrupted calcium dynamics in reactive astrocytes occur with endfeet-arteriole decoupling in an amyloid mouse model of Alzheimer’s disease
 Blaine E. Weiss, et al. bioRxiv 2025.01.24.634584; doi: https://doi.org/10.1101/2025.01.24.634584
 
-STONE-LAVA is a combined analysis platform for the quantitation of functional imaging data acquired by two-photon microscopy. This document will provide a general overview of their key functions, and their utilization for comparision of cell activity to vascular dynamics.  
+## STONE-LAVA is a combined analysis platform for the quantitation of functional imaging data acquired by two-photon microscopy. This document will provide a general overview of their key functions, and their utilization for comparision of cell activity to vascular dynamics.  
 
-#### STONE: (Spatial & Temporal Observation of Network Events) aids in the identification and subcompartmentalization of active cells. Fluorescence time series data extracted from these segmentations are analyzed for signaling events, and transient parameters such as amplitude, rise/decay times, and area under the curve (AUC) are determined. Once all events are indexed, synchronicity of cells within the network is determined by those events and are mapped.
 
-#### LAVA: (Localized Analysis of Vascular Astroyctes) is a standalone application with optional pairing with STONE acquired data. LAVA's initial function is to quantify vascular tone changes during imaged experiment trials. It does so by modeling vascular architecture and then measuring cross sectional diameters of vessels of interest. Next, the results can be used to quantify fluorescence changes that occur in perivascular spaces immediately adjacent to the vessel of interest. This allows for directional and correlational assessment of vascular tone changes and vascular/perivascular cell activity. When launched from STONE, cell segmentation data may be used to make additional comparisions with vascular and perivascular activity from the same trial, and field of view.
+# Attention: Uploads in progress!
+
+## Available NOW!
+### LAVA: (Localized Analysis of Vascular Astroyctes) is a standalone application with optional pairing with STONE acquired data. LAVA's initial function is to quantify vascular tone changes during imaged experiment trials. It does so by modeling vascular architecture and then measuring cross sectional diameters of vessels of interest. Next, the results can be used to quantify fluorescence changes that occur in perivascular spaces immediately adjacent to the vessel of interest. This allows for directional and correlational assessment of vascular tone changes and vascular/perivascular cell activity. When launched from STONE, cell segmentation data may be used to make additional comparisions with vascular and perivascular activity from the same trial, and field of view.
+
+## Coming Soon!
+### STONE: (Spatial & Temporal Observation of Network Events) aids in the identification and subcompartmentalization of active cells. Fluorescence time series data extracted from these segmentations are analyzed for signaling events, and transient parameters such as amplitude, rise/decay times, and area under the curve (AUC) are determined. Once all events are indexed, synchronicity of cells within the network is determined by those events and are mapped.
 
 ## Citation/Contact Information
 We sincerely hope you will find value in these applications in which case we ask that you please include the following reference in your publications:
