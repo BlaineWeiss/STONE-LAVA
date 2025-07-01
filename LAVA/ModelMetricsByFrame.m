@@ -24,7 +24,6 @@ function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pat
 %%
 tic
 parfor stack = 1 : size(aDialine2,3)
-    %clear indarr a b rcood bdist arr midline startx
     rdistum = [];
     rdist = [];
     arr = [];
@@ -137,24 +136,8 @@ parfor stack = 1 : size(aDialine2,3)
         ar2 = pdist(ce);
         arr(len1) = ar;
         arr2(len1) = ar2;
-        %this is the fig
-        %{
-                        scatter(app.UIAxes,xs,ys)
-                        scatter(app.UIAxes,b(:,1),b(:,2))
-                        hold(app.UIAxes,'on')
-                        scatter(app.UIAxes,be(:,1),be(:,2))
-                        plot(app.UIAxes,c(:,1),c(:,2))
-                        plot(app.UIAxes,ce(:,1),ce(:,2))
-        %}
-        %hold on
-        %plot(app.UIAxes,ce(:,1),ce(:,2))
-        %    drawnow limitrate
-        %end
-
         rdist = arr(len1);
         rdist2 = arr2(len1);
-        %rdist = bdist;          %%%% OUR RADIUS!!
-        %rdist2 = bdist2;
         rdist3 = mean([rdist,rdist2]);
 
         %%%HERE I CAN EXTRACT THE RADIUS IN LINEAR PIXELS & USE IT TO MOVE THE ENDFOOT ROI IN THE STACK
