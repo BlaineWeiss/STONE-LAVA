@@ -1,4 +1,4 @@
-function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,scaleum)
+function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,indexingsections,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,scaleum)
 % STONE / LAVA - Scientific Analysis Software
 %
 % Copyright © 2025 Blaine Everett Weiss, University of Kentucky Research Foundation
@@ -86,6 +86,7 @@ parfor stack = 1 : size(aDialine2,3)
 
     midpairs = cat(1,midx,midy)';
     [a,ia,ic] = unique(midpairs,'rows','stable');   %%%midpoints
+    indexingsections{1,stack} = ia;
     areasegmentsamps{1,stack} = ic;
     startpairs = cat(1,startx,starty)';
     b = startpairs(ia,:);

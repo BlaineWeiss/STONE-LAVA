@@ -1,0 +1,66 @@
+# ---------------------------
+# MATLAB / Simulink projects
+# ---------------------------
+
+# Autosave & backups
+*.asv
+*.m~
+*~
+*.bak
+*.autosave
+
+# Generated code / build artifacts
+codegen/
+slprj/
+sccprj/
+_ert_rtw/
+
+# Compiled MEX binaries (platform-specific)
+*.mex*
+
+# MATLAB prefs/cache (machine-specific)
+.matlab/
+
+# Large binary formats (usually not versioned)
+# (Uncomment selectively if you don't want to track these)
+# *.mat
+# *.fig
+# *.slx
+# *.mdl
+# *.mlx
+# *.p
+
+# ---------------------------
+# Python helpers (if present)
+# ---------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.env/
+.venv/
+env/
+venv/
+
+# ---------------------------
+# Editors / OS cruft
+# ---------------------------
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ---------------------------
+# Project outputs (customize)
+# ---------------------------
+# logs/
+# output/
+# results/
+# exports/
+# data/
+# tmp/

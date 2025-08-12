@@ -48,22 +48,22 @@ k=1
 
 x1 = 1:length(pos_response(:,1));
 xx = pos_response(:,1);
-xv = linspace(x1(1),x1(end),800);
+xv = linspace(x1(1),x1(end),600);
 xx = interp1(x1,xx,xv,'pchip');
 
 y1 = 1:length(pos_response(:,2));
 yy = pos_response(:,2);
-yv = linspace(y1(1),y1(end),800)
+yv = linspace(y1(1),y1(end),600)
 yy = interp1(y1,yy,yv,'pchip');
 
 x2 = 1:length(posres2(:,1));
 xx2 = posres2(:,1);
-xv2 = linspace(x2(1),x2(end),800);
+xv2 = linspace(x2(1),x2(end),600);
 xx2 = interp1(x2,xx2,xv2,'pchip');
 
 y2 = 1:length(posres2(:,2));
 yy2 = posres2(:,2);
-yv2 = linspace(y2(1),y2(end),800);
+yv2 = linspace(y2(1),y2(end),600);
 yy2 = interp1(y2,yy2,yv2,'pchip');
 
 figfX = f1x(xv);%xx;
