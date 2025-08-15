@@ -1,4 +1,4 @@
-function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,indexingsections,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,scaleum)
+function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,indexingsections,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,CrossSectionNumber,scaleum)
 % STONE / LAVA - Scientific Analysis Software
 %
 % Copyright © 2025 Blaine Everett Weiss, University of Kentucky Research Foundation
@@ -23,19 +23,23 @@ function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pat
 % Blaine E. Weiss, et al. bioRxiv 2025.01.24.634584; doi: https://doi.org/10.1101/2025.01.24.634584
 %%
 tic
-parfor stack = 1 : size(aDialine2,3)
-    rdistum = [];
-    rdist = [];
-    arr = [];
-    arr2 = [];
-    starty = [];
-    startx = [];
-    midy = [];
-    midx = [];
-   
-    endx = [];
-    endy = [];
+rdistum = [];
+rdist = [];
+arr = [];
+arr2 = [];
+starty = [];
+startx = [];
+midy = [];
+midx = [];
+endx = [];
+endy = [];
+if mod(CrossSectionNumber,2) == 0
+    filtnum = CrossSectionNumber + 1;
+else
+    filtnum = CrossSectionNumber;
+end
 
+parfor stack = 1 : size(aDialine2,3)
     testbinn = aDialine2(:,:,stack);    %%%%Maybe shouldn't be an app variable (only 1 frame at a time)
     rpix = sum(testbinn,1);
 
@@ -68,6 +72,8 @@ parfor stack = 1 : size(aDialine2,3)
     midline(cancind) = [];
     indpoint(cancind) = [];
     endpoint(cancind) = [];
+
+    %{
     for i = 1 : length(midline)
         midx(i) = floor(coordx(midline(i),i));
         midy(i) = floor(coordy(midline(i),i));
@@ -77,27 +83,68 @@ parfor stack = 1 : size(aDialine2,3)
 
         endx(i) = round(coordx(endpoint(i),i));
         endy(i) = round(coordy(endpoint(i),i));
-        %OPTION 2:
-        %   if coordx(indpoint(i),i) == 0
-        %  startx(i) = floor(coordx(indpoint(i)+1,i,stack));
-        %  starty(i) = floor(coordy(indpoint(i)+1,i,stack));
-        %  end
     end
+    %}
 
-    midpairs = cat(1,midx,midy)';
-    [a,ia,ic] = unique(midpairs,'rows','stable');   %%%midpoints
-    indexingsections{1,stack} = ia;
-    areasegmentsamps{1,stack} = ic;
-    startpairs = cat(1,startx,starty)';
+    midx(:,stack) = floor(coordx(sub2ind(size(coordx), midline(:)', 1:length(midline))))';
+    midy(:,stack) = floor(coordy(sub2ind(size(coordy), midline(:)', 1:length(midline))))';
+    startx(:,stack) = floor(coordx(sub2ind(size(coordx), indpoint(:)', 1:length(midline))))';
+    starty(:,stack) = floor(coordy(sub2ind(size(coordy), indpoint(:)', 1:length(midline))))';
+    endx(:,stack) = floor(coordx(sub2ind(size(coordx), endpoint(:)', 1:length(midline))))';
+    endy(:,stack) = floor(coordy(sub2ind(size(coordy), endpoint(:)', 1:length(midline))))';
+
+    midline(:,stack) = midline;
+    indpoint(:,stack) = indpoint;
+    endpoint(:,stack) = endpoint;
+
+    midpa = cat(2,midx(:,stack),midy(:,stack));
+
+    midpa = round(sgolayfilt(midpa, 3, filtnum));
+
+    %DOWNSAMPLE FOR CONSISTANT CROSSSECTIONS AND EASY VOLUME
+    d = [0; cumsum(sqrt(sum(diff(midpa).^2, 2)))];
+    d_norm = d / d(end);
+    % Remove duplicates
+    [d_unique, ia, ~] = unique(d_norm, 'stable');
+    midpairs_unique = midpa(ia, :);
+    % Define query points
+    query = linspace(0, 1, CrossSectionNumber); %change to slider value%%%
+    % Interpolate along the cleaned arc length
+    xq = interp1(d_unique, midpairs_unique(:,1), query, 'linear');
+    yq = interp1(d_unique, midpairs_unique(:,2), query, 'linear');
+    resampledPoints = [xq(:), yq(:)];
+    % Find closest original indices
+    %idxOriginal = zeros(CrossSectionNumber, 1);
+    for i = 1:CrossSectionNumber
+        diffs = (midpa(:,1) - xq(i)).^2 + (midpa(:,2) - yq(i)).^2;
+        [~, idxOriginal(i)] = min(diffs);
+    end
+    midpairs{stack} = midpa;
+    aa{stack} = resampledPoints;
+    idxOriginal = idxOriginal(idxOriginal > 0);
+    indexingsections(:,stack) = idxOriginal; %ia;  %used for consistant cross sections (ranked analysis)
+end
+
+indexingsections = round(mean(indexingsections,2));
+
+parfor stack = 1 : size(aDialine2,3)
+    midpairss = midpairs{stack};
+    a = aa{stack};
+    ia = indexingsections                           %Downsample index for model reduction and volume measurement
+    [~,~,ic] = unique(midpairss,'rows','stable');   %%%midpoints
+    areasegmentsamps{1,stack} = ic;                 %Preserved for max upsampling for fluorescence pairing
+    startpairs = cat(2,startx(:,stack),starty(:,stack));
+    %startpairs = cat(1,startx,starty)';
     b = startpairs(ia,:);
-    endpairs = cat(1,endx,endy)';
+    endpairs = cat(2,endx(:,stack),endy(:,stack));
+    %endpairs = cat(1,endx,endy)';
     be = endpairs(ia,:);
     p = pdist([b(:,1),b(:,2);be(:,1),be(:,2)]);
     x = cat(1,a(:,1),b(:,1));
     y = cat(1,a(:,2),b(:,2));
     asiz = 1:length(a);
-    xpoly = fit(asiz',a(:,1),'smoothingspline','SmoothingParam',0.001);
-    ypoly = fit(asiz',a(:,2),'smoothingspline','SmoothingParam',0.001);
+    xpoly = fit(asiz',a(:,1),'smoothingspline','SmoothingParam',1);
+    ypoly = fit(asiz',a(:,2),'smoothingspline','SmoothingParam',1);
     xs = feval(xpoly,asiz(1:1:length(asiz)));
     ys = feval(ypoly,asiz(1:1:length(asiz)));
     dist = zeros(length(ys),1);
@@ -129,8 +176,10 @@ parfor stack = 1 : size(aDialine2,3)
     dist(len1) = p;
     rdiststore3 = zeros(1,length(ys));
     rdist3 = 0;
-    for len1 = 1 : length(ys) %was a
+    arr = zeros(1, length(xs));
+    arr2 = zeros(1, length(xs));
 
+    for len1 = 1 : length(ys) %was a
         c = [xs(len1),ys(len1) ; b(len1,1),b(len1,2)];
         ce = [xs(len1),ys(len1) ; be(len1,1),be(len1,2)];
         ar = pdist(c);     %%%Get the distance of particular midpoint a from all vessel edges.. we will then take the min to get it's closest neighbor
@@ -144,7 +193,6 @@ parfor stack = 1 : size(aDialine2,3)
         %%%HERE I CAN EXTRACT THE RADIUS IN LINEAR PIXELS & USE IT TO MOVE THE ENDFOOT ROI IN THE STACK
         rdiststore3(1,len1) = rdist3;
     end
-
     SkeletonModel{stack} = [xs,ys];
     StartModel{stack} = b;  %coords of start and end of vessel
     EndModel{stack} = be;

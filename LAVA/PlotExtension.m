@@ -1,4 +1,4 @@
-function [Y,x,Extension,xi,yi] = PlotExtension(Chn2,UmPix,figfX,figfY,sysX,sysY,Invslopefigf,Interceptf1,Extension,passthrough)
+function [Y,x,Extension,xi,yi] = PlotExtension(Chn2,axisobj,UmPix,figfX,figfY,sysX,sysY,Invslopefigf,Interceptf1,Extension,passthrough)
 % STONE / LAVA - Scientific Analysis Software
 %
 % Copyright © 2025 Blaine Everett Weiss, University of Kentucky Research Foundation
@@ -13,23 +13,21 @@ function [Y,x,Extension,xi,yi] = PlotExtension(Chn2,UmPix,figfX,figfY,sysX,sysY,
 %
 % License terms: See LICENSE_ACADEMIC.txt and LICENSE_COMMERCIAL.txt for details.
 %
-% For commercial licensing inquiries, contact: blaine.weiss@uky.edu
+% For commercial licensing inquiries, contact: [Your Email] or [Tech Transfer Office Email]
 %
 % THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
 % If you use this software in published work, please cite:
-
-% Disrupted calcium dynamics in reactive astrocytes occur with endfeet-arteriole decoupling in an amyloid mouse model of Alzheimer’s disease
-% Blaine E. Weiss, et al. bioRxiv 2025.01.24.634584; doi: https://doi.org/10.1101/2025.01.24.634584
+% [Your Citation Here]
 %%
 xi = gpuArray(zeros(1,100));  %or size(Y,2); %%%Consider switching if need higher resolution in the future (specify in x linspace function)
 yi = gpuArray(zeros(1,100));
 %app.ModelExtension = Extension
 slidvalue = Extension;
-crosschange = round(slidvalue ./ UmPix);
-imagesc(app.UIAxes,Chn22(:,:,1));
-axis(app.UIAxes);
-hold(app.UIAxes,'on');
+crosschange = round(slidvalue ./ UmPix(1));
+imagesc(axisobj,Chn2(:,:,1));
+axis(axisobj);
+hold(axisobj,'on');
 yinv = 0;
 for fi = 1:length(figfX)
     figs = figfX(fi); %%%%%%SPEED
@@ -67,7 +65,7 @@ for fi = 1:length(figfX)
     x = (Y - Interceptf1(fi))./Invslopefigf(fi); %Plug Y into cross section formula.
 
     % Y = (Invslopefigf(fi).*(x)) + Interceptf1(fi);
-    plot(x,Y,'Parent',app.UIAxes);
+    plot(x,Y,'Parent',axisobj);
     drawnow limitrate;
     switch passthrough
         case 0

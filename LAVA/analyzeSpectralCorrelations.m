@@ -72,12 +72,12 @@ lowcutofffreq = 0.02 / (acqrate / 2);
 highcutofffreq = [0.75 11] / (acqrate / 2);
 [b1, a1] = butter(1, lowcutofffreq, 'high');
 [b2, a2] = butter(3, [highcutofffreq(1), min(highcutofffreq(2), 0.99)]);
-
-numCols = desired_size;
+numCols = size(resizedcrosssections,2);
 numFrames = length(Times);
 
 % Preallocate with NaNs for clarity and memory
 results = struct();
+results.ButterCoeff = NaN(1,4);
 results.xrecsum = zeros(1, numFrames);
 results.ultralowbandstopsum = zeros(1, numFrames);
 results.VascularRegionCorr = NaN(1, numCols);
@@ -86,12 +86,15 @@ results.VascularRegionLowfreqCorr = NaN(1, numCols);
 results.Highbandmat = NaN(numCols, numFrames);
 results.Lowbandmat = NaN(numCols, numFrames);
 results.ROItrimmedCrossAreas = NaN(numFrames, numCols);
+ButterCoeff = [b1,a1,b2,a2];
+NaNindex = zeros(1,numCols);
 
 parfor col = 1:numCols
     normarea = resizedcrosssections(:,col);
     aa = Parallelregion(col,:);
 
     if all(isnan(aa))
+        NaNindex(col) = 1;
         continue
     end
 
@@ -122,6 +125,7 @@ ultralowbandstopsum = sum(ultralowbandstopsum_temp, 1);
 
 % Package the results
 results = struct(...
+    'ButterCoeff', ButterCoeff, ...
     'xrecsum', xrecsum, ...
     'ultralowbandstopsum', ultralowbandstopsum, ...
     'VascularRegionCorr', VascularRegionCorr, ...
@@ -129,6 +133,7 @@ results = struct(...
     'VascularRegionLowfreqCorr', VascularRegionLowfreqCorr, ...
     'Highbandmat', Highbandmat, ...
     'Lowbandmat', Lowbandmat, ...
-    'ROItrimmedCrossAreas', ROItrimmedCrossAreas);
+    'ROItrimmedCrossAreas', ROItrimmedCrossAreas, ...
+    'NaNindex', NaNindex);
 profile viewer
 end
