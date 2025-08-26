@@ -17,7 +17,10 @@ THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 If you use this software in published work, please cite:
 
 Disrupted calcium dynamics in reactive astrocytes occur with endfeet-arteriole decoupling in an amyloid mouse model of Alzheimer’s disease
-Blaine E. Weiss, et al. bioRxiv 2025.01.24.634584; doi: https://doi.org/10.1101/2025.01.24.634584
+Blaine E. Weiss, et al. J Neurosci. 2025 Aug 15:e0349252025. doi: 10.1523/JNEUROSCI.0349-25.2025. Epub ahead of print. PMID: 40816764.
+https://www.jneurosci.org/content/early/2025/08/13/JNEUROSCI.0349-25.2025
+
+
 
 ## STONE-LAVA is a combined analysis platform for the quantitation of functional imaging data acquired by two-photon microscopy. This document will provide a general overview of their key functions, and their utilization for comparision of cell activity to vascular dynamics.  
 
@@ -33,12 +36,14 @@ Blaine E. Weiss, et al. bioRxiv 2025.01.24.634584; doi: https://doi.org/10.1101/
 ## Citation/Contact Information
 We sincerely hope you will find value in these applications in which case we ask that you please include the following reference in your publications:
 
+Weiss BE, Gant JC, Lin RL, Gollihue JL, Rogers CB, Kraner SD, Rucker EB, Katsumata Y, Jiang Y, Nelson PT, Wilcock DM, Sompol P, Thibault O, Norris CM. Disrupted calcium dynamics in reactive astrocytes occur with endfeet-arteriole decoupling in an amyloid mouse model of Alzheimer's disease. J Neurosci. 2025 Aug 15:e0349252025. doi: 10.1523/JNEUROSCI.0349-25.2025. Epub ahead of print. PMID: 40816764.
+
 
 <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">Documentation for Spatial & Temporal Observation of Network Events (STONE) & Localized Analysis of Vascular Astrocytes (LAVA) </span> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
 
 We are continually working to improve the performance and versatility of the techniques used in this package.
 
-For specific inquiries or recommended improvements to these applications, also feel free to contact us at
+For specific inquiries or recommended improvements to these applications, feel free to contact us at
 Blaine.Weiss@uky.edu
 
 
