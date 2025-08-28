@@ -1,10 +1,12 @@
-# LAVA FUNCTIONS CAN BE FOUND IN THIS FOLDER
-
 # How to use LAVA (DRAFT IN PROGRESS)
+
+Thank you for interest in LAVA! In this document contains detailed instructions on how to open a file using LAVA, and extract vascular-perivascular activity data from a .tif file. Metadata for the analysis is formatted for ScanImage acquired .tifs. We are in the process of importing Nikon NIS Elements, and Prarie View tag structures. 
+
+For any questions on using this software, please feel free to contact Blaine Weiss at Blaine.Weiss@uky.edu.
+
 
 <p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><span property="dct:title">Documentation for Spatial & Temporal Observation of Network Events (STONE) & Localized Analysis of Vascular Astrocytes (LAVA) </span> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-NC-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
 
-Thank you for interest in LAVA!
 
 ## GUI Layout
 ![alt text](img/LAVAGUIlayout.png)
@@ -12,8 +14,8 @@ Thank you for interest in LAVA!
 ## LAVA Layout
 1. Load Data Button
 2. Start Analysis
-3. Experiment Trial Settings
-4. App settings
+3. [Experiment Trial Settings](#assigning-experimental-trial-details)
+4. App settings (Coming soon)
 5. Channel Summary Display 
 6. Primary Channel Display
 7. Linearized Model View
@@ -81,27 +83,33 @@ Using the model control panel, further refine the vessel of interest and perform
 1. Model View
 2. View Option
 3. Play Button
-4. Edge Detection Slider
+4. Edge/Activity Detection Slider
 5. [Fill Gaps Button](#Fill)
 6. [Crop Tool](#Crop)
-7. Map Mask to Model
-8. Play Model on Primary Channel Display Window
+7. [Map Mask to Model](#map-mask)
+8. [Play Model on Primary Channel Display Window](#play-vessel-map)
 9. [Model Size Slider (Data reduction option)](#number-of-samples-slider)
 10. [Calculate Volume / Set Model Parameters](Volumetric-Analysis)
 11. Annotation Edit Field
 12. Analyze Next Vessel
 13. [Save Button](#Saving)
-14. Asset Export Tool
+14. [Asset Export Tool](#asset-export-tool)
 
 
 ![alt text](img/image-4.png)
+
+## Steps To Complete Model (In Order)
+
+### Set Edge Detection
+
+A default value is set based on a thresholding function. It is recommended to set the value at least a bit lower than the default for best capture of the vessel.
 
 ### Fill
 ![alt text](img/image-7.png) 
 Pressing the Fill button with fill gaps in the vessel due to intensity variations.
 ### Crop
 ![alt text](img/image-8.png)
-After pressing the crop button, a selection target reticle will appear. Click the left and right boundaries that contain the segment of vessel that you intend to keep for measurement. 
+In the case of bad signal to noise regions or other vessels contaminating the model, use the crop tool to remove problem regions and shorten the length of vessel used for analysis. After pressing the crop button, a selection target reticle will appear. Click the left and right boundaries that contain the segment of vessel that you intend to keep for measurement.  
 
 <!--Undo button needed -->
 
@@ -112,6 +120,7 @@ Due to differences in imaging resolution, vessel size, and computational capacit
 Once the vessel has been prepared, the "Map Mask" button should already be illuminated in green. Pressing this button will process the mask into the model and prepare the final cross sections for size calculations.
 ### Play Vessel Map
 Displays the resulting vessel captured by the model in the image stack.
+
 ![alt text](img/image-9.png)
 
 ### Annotations
@@ -133,9 +142,11 @@ Once complete, you can move on to analyze another vessel by pressing the "Next V
 ### Saving
 When the application detects results in the data structure, the save button will illuminate green. At this point, you may save your results and exit the application. However, if there are additional fluorescence channels with activity in the perivascular space, you may continue the analysis with those channels. Additional instructions are below in the [Perivascular Fluorescence](#Perivascular-Fluorescence) section.
 
-Currently, data structures are only output into .mat files.
+Currently, data structures are only output into .mat files. Detailed documentation of the data structure layout will be uploaded in the coming weeks.
 
 ### Asset Export Tool
+
+During analysis, various visual assets displayed in LAVA and others are available for export. Pressing the "Asset Export" button will open a dialog where you can choose which assets to export. Select the desired assets from the window or click "Select All" to export all available assets. Assets are exported to the same directory as the analysis data structure.
 
 ### Perivascular Fluorescence
 Once vascular data has been saved, the user may optionally analyze fluorescence activity data from perivascular spaces. To begin, press the "Perivascular Fluorescence Analysis" button.
@@ -171,7 +182,7 @@ Rocker Control | Vessel View | Perivascular View
 The vascular channel can be viewed by clicking the rocker switch on the left of the control panel (Vascular Channel Name -- Current Fluorescence Channel Name) Additional view settings with this rocker can be set with Additional Options. (Coming soon)
 
 ### Bridging to STONE / Advanced Correlational Analysis
- COMING SOON
+ COMING SOON WITH THE RELEASE OF STONE
 
 
 l
