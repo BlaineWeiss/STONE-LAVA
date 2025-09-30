@@ -24,8 +24,8 @@ function [pixelcoords, bound,ROIcoordx,ROIcoordy] = processROIcoords(ratOutVes, 
 %%
 for stack = 1:dims(3)
 endfoot = roipoly(ratOutVes,xxx,yyy2(:,stack));
-ROIcoordx(:,:,stack) = endfoot .* coordx;    %%%The coordinates of the ROI on the channel image
-ROIcoordy(:,:,stack) = endfoot .* coordy;
+ROIcoordx(:,:,stack) = uint16(round(endfoot .* coordx));    %%%The coordinates of the ROI on the channel image
+ROIcoordy(:,:,stack) = uint16(round(endfoot .* coordy));
 end
 
 %%%%%%%%%%%%%%%

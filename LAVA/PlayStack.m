@@ -1,4 +1,4 @@
-function PlayStack(Stack,ChnLength,Axesobj,cmap)
+function a1 = PlayStack(Stack,ChnLength,Axesobj,cmap)
 % STONE / LAVA - Scientific Analysis Software
 %
 % Copyright © 2025 Blaine Everett Weiss, University of Kentucky Research Foundation

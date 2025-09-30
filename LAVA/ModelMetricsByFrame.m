@@ -1,4 +1,4 @@
-function [SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,indexingsections,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,CrossSectionNumber,scaleum)
+function [Allvalid,Valid,SkeletonModel,StartModel,EndModel,indpointst,endpointst,r1,r2,avgr,pathlength,indexingsections,areasegmentsamps,rdiststores,areasections,lenareasec] = ModelMetricsByFrame(aDialine2,coordx,coordy,CrossSectionNumber,scaleum)
 % STONE / LAVA - Scientific Analysis Software
 %
 % Copyright © 2025 Blaine Everett Weiss, University of Kentucky Research Foundation
@@ -29,17 +29,24 @@ arr = [];
 arr2 = [];
 starty = [];
 startx = [];
-midy = [];
-midx = [];
+midy =       NaN(size(aDialine2, 2),size(aDialine2, 3));
+midx =  NaN(size(aDialine2, 2),size(aDialine2, 3));
 endx = [];
 endy = [];
+
+
+
+
+
 if mod(CrossSectionNumber,2) == 0
     filtnum = CrossSectionNumber + 1;
 else
     filtnum = CrossSectionNumber;
 end
-
-parfor stack = 1 : size(aDialine2,3)
+nRows = size(coordx,1);
+nCols = size(coordx,2);
+Allvalid = true(nCols,1);
+for stack = 1 : size(aDialine2,3)
     testbinn = aDialine2(:,:,stack);    %%%%Maybe shouldn't be an app variable (only 1 frame at a time)
     rpix = sum(testbinn,1);
 
@@ -53,12 +60,15 @@ parfor stack = 1 : size(aDialine2,3)
                 break
             end
         end
+        %if indpoint(i) == 0, indpoint(i) = indpoint(i-1); , end
         for ii = 100: -1: 1
             if indexstart(ii,i) == 1
                 endpoint(i) = ii;
                 break
             end
         end
+        %if endpoint(i) == 0, endpoint(i) = endpoint(i-1); , end
+
     end
     indpoint(1) = indpoint(2);
     endpoint(1) = endpoint(2);
@@ -69,9 +79,9 @@ parfor stack = 1 : size(aDialine2,3)
     midline = floor(indpoint + (endpoint - indpoint)/2); %rpix/2);
     midline(1) = midline(2);
     cancind = find(~midline);
-    midline(cancind) = [];
-    indpoint(cancind) = [];
-    endpoint(cancind) = [];
+    midline(cancind) = NaN; %[];
+    indpoint(cancind) = NaN; %[];
+    endpoint(cancind) = NaN; %[];
 
     %{
     for i = 1 : length(midline)
@@ -85,18 +95,59 @@ parfor stack = 1 : size(aDialine2,3)
         endy(i) = round(coordy(endpoint(i),i));
     end
     %}
+% Find valid midline entries
+cols  = 1:length(midline);
 
+valid = midline > 10 & midline <= nRows & ~isnan(midline) & indpoint > 5 & indpoint < 50 & endpoint < 95 & endpoint >50;
+Allvalid = Allvalid & valid;
+%midline(:) to midline(valid)
+%GAP COMPATABLITY
+%Unevenly distributes NOT GOOD
+%{ 
+    midx(valid,stack) = floor(coordx(sub2ind(size(coordx), midline(valid)', cols(valid))))';
+    midy(valid,stack) = floor(coordy(sub2ind(size(coordy), midline(valid)', cols(valid))))';
+    startx(valid,stack) = floor(coordx(sub2ind(size(coordx), indpoint(valid)', cols(valid))))';
+    starty(valid,stack) = floor(coordy(sub2ind(size(coordy), indpoint(valid)', cols(valid))))';
+    endx(valid,stack) = floor(coordx(sub2ind(size(coordx), endpoint(valid)', cols(valid))))';
+    endy(valid,stack) = floor(coordy(sub2ind(size(coordy), endpoint(valid)', cols(valid))))';
+%}
+
+validmidlines = ~isnan(midline);
+% Maintains Linearity of samples
+%{
     midx(:,stack) = floor(coordx(sub2ind(size(coordx), midline(:)', 1:length(midline))))';
     midy(:,stack) = floor(coordy(sub2ind(size(coordy), midline(:)', 1:length(midline))))';
     startx(:,stack) = floor(coordx(sub2ind(size(coordx), indpoint(:)', 1:length(midline))))';
     starty(:,stack) = floor(coordy(sub2ind(size(coordy), indpoint(:)', 1:length(midline))))';
     endx(:,stack) = floor(coordx(sub2ind(size(coordx), endpoint(:)', 1:length(midline))))';
     endy(:,stack) = floor(coordy(sub2ind(size(coordy), endpoint(:)', 1:length(midline))))';
+%}
+% Can handle NaN indices, no vessel in model portions % maintains linearity of samples
+    midx(validmidlines,stack) = floor(coordx(sub2ind(size(coordx), midline(validmidlines)', 1:sum(validmidlines))))';
+    midy(validmidlines,stack) = floor(coordy(sub2ind(size(coordy), midline(validmidlines)', 1:sum(validmidlines))))';
+    startx(validmidlines,stack) = floor(coordx(sub2ind(size(coordx), indpoint(validmidlines)', 1:sum(validmidlines))))';
+    starty(validmidlines,stack) = floor(coordy(sub2ind(size(coordy), indpoint(validmidlines)', 1:sum(validmidlines))))';
+    endx(validmidlines,stack) = floor(coordx(sub2ind(size(coordx), endpoint(validmidlines)', 1:sum(validmidlines))))';
+    endy(validmidlines,stack) = floor(coordy(sub2ind(size(coordy), endpoint(validmidlines)', 1:sum(validmidlines))))';
+%}
+    %midline(:,stack) = midline;
+    %indpoint(:,stack) = indpoint;
+    %endpoint(:,stack) = endpoint;
+end
 
-    midline(:,stack) = midline;
-    indpoint(:,stack) = indpoint;
-    endpoint(:,stack) = endpoint;
+%Allow removal of ends from volume
+cutnomodelends = sum(midx,2,'includenan');
+cutnomodelends = isnan(cutnomodelends);
+midx = midx(~cutnomodelends,:);
+midy = midy(~cutnomodelends,:);
+startx = startx(~cutnomodelends,:);
+starty = starty(~cutnomodelends,:);
+endx = endx(~cutnomodelends,:);
+endy = endy(~cutnomodelends,:);
+%%%%%%%%%%%%%%%%%
 
+
+for stack = 1 : size(aDialine2,3)
     midpa = cat(2,midx(:,stack),midy(:,stack));
 
     midpa = round(sgolayfilt(midpa, 3, filtnum));
@@ -104,6 +155,8 @@ parfor stack = 1 : size(aDialine2,3)
     %DOWNSAMPLE FOR CONSISTANT CROSSSECTIONS AND EASY VOLUME
     d = [0; cumsum(sqrt(sum(diff(midpa).^2, 2)))];
     d_norm = d / d(end);
+    % Remove invalid (branched regions)
+    %d_norm = d_norm(valid);
     % Remove duplicates
     [d_unique, ia, ~] = unique(d_norm, 'stable');
     midpairs_unique = midpa(ia, :);
@@ -124,15 +177,16 @@ parfor stack = 1 : size(aDialine2,3)
     idxOriginal = idxOriginal(idxOriginal > 0);
     indexingsections(:,stack) = idxOriginal; %ia;  %used for consistant cross sections (ranked analysis)
 end
-
 indexingsections = round(mean(indexingsections,2));
+Valid = Allvalid(indexingsections);
 
+areasegmentsamps = zeros(size(midpa,1), size(aDialine2,3));
 parfor stack = 1 : size(aDialine2,3)
     midpairss = midpairs{stack};
     a = aa{stack};
     ia = indexingsections                           %Downsample index for model reduction and volume measurement
     [~,~,ic] = unique(midpairss,'rows','stable');   %%%midpoints
-    areasegmentsamps{1,stack} = ic;                 %Preserved for max upsampling for fluorescence pairing
+    areasegmentsamps(:,stack) = ic;                 %Preserved for max upsampling for fluorescence pairing
     startpairs = cat(2,startx(:,stack),starty(:,stack));
     %startpairs = cat(1,startx,starty)';
     b = startpairs(ia,:);
@@ -206,7 +260,7 @@ parfor stack = 1 : size(aDialine2,3)
     areasection = area;
     pathlength(stack) = totaldist; %sum(dist);   %%%YES!!
     rdiststores(stack,:) = {rdiststore3};    %used to approximate motion of endfoot roi
-    areasections(stack,:) = {areasection};
+    areasections(stack,:) = areasection;
     arlen = size(areasection,2); %was length(areasection)
     lenareasec(stack) = arlen; %number of crosssections
 end
