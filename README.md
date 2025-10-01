@@ -17,7 +17,7 @@ If you use this software in published work, please cite:
 
 Disrupted calcium dynamics in reactive astrocytes occur with endfeet-arteriole decoupling in an amyloid mouse model of Alzheimer’s disease
 Blaine E. Weiss, et al. Journal of Neuroscience 1 October 2025, 45 (40) e0349252025; DOI: 10.1523/JNEUROSCI.0349-25.2025
-[https://www.jneurosci.org/content/early/2025/08/13/JNEUROSCI.0349-25.2025](https://www.jneurosci.org/content/45/40/e0349252025)
+[https://www.jneurosci.org/content/45/40/e0349252025](https://www.jneurosci.org/content/45/40/e0349252025)
 
 
 
