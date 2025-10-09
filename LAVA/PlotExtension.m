@@ -20,8 +20,14 @@ function [Y,x,Extension,xi,yi] = PlotExtension(Chn2,axisobj,UmPix,figfX,figfY,sy
 % If you use this software in published work, please cite:
 % [Your Citation Here]
 %%
+g = canUseGPU
+if g == 1
 xi = gpuArray(zeros(1,100));  %or size(Y,2); %%%Consider switching if need higher resolution in the future (specify in x linspace function)
 yi = gpuArray(zeros(1,100));
+else
+xi = zeros(1,100);  %or size(Y,2); %%%Consider switching if need higher resolution in the future (specify in x linspace function)
+yi = zeros(1,100);
+end
 %app.ModelExtension = Extension
 slidvalue = Extension;
 crosschange = round(slidvalue ./ UmPix(1));
