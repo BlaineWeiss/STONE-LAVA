@@ -41,7 +41,8 @@ profile on
     resizedcrosssections = NaN(size(Parallelregion, 2), desired_size);
     N = size(areasections, 1);
     parfor i = 1:N
-        section = areasections{i};
+        %section = areasections{i};
+        section = areasections(i,:);
         if isempty(section)
             continue;
         end

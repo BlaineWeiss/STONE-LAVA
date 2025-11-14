@@ -36,16 +36,31 @@ try
 catch
     for fi = 1:fimax
         try
-            indexes = sub2ind([size(Chn2r,[1,2])], yi(fi,:), xi(fi,:));
+            index = sub2ind([size(Chn2r,[1,2])], yi(fi,:), xi(fi,:));
+            indexes(fi,:) = index;
+        catch
+            %ytmp = ~isnan(yi(fi,:));
+            %xtmp = ~isnan(xi(fi,:));
+            index = sub2ind([size(Chn2r,[1,2])], yi(fi,validind(fi,:)),xi(fi,validind(fi,:)));
+            indexes(fi,validind(fi,:)) = index; %zeros(1,size(yi,2));
         end
     end
 end
-parfor stack = 1: ChnLength
-    Dialine = single(zeros(fimax,samps));
+%%
+for stack = 1: ChnLength
+    %Dialine = single(zeros(fimax,samps));
+    Dialine = single(zeros(size(xi,1),samps));
     Chn22 = Chn2r(:,:,stack);
     %m = zeros(512,512);
     m = Chn22; %(floor(NDiam.YData),floor(NDiam.XData)) %(subimage of line field)
-    Dialine(validind) = m(indexes(validind));
-    Dialine2(:,:,stack) = Dialine';
+    ok = validind ...
+   & isfinite(indexes) ...
+   & indexes >= 1 ...
+   & indexes <= numel(m) ...
+   & indexes == floor(indexes);      
+   Dialine(ok) = m(indexes(ok));
+ 
+ Dialine2(:,:,stack) = Dialine';
 end
+%%
 end

@@ -96,7 +96,7 @@ for t = 1:T
         averageTS(t,s)   = mean(vals, 'omitnan');
     end
 end
-packedModelstructure.values = pixValues;
+packedModelstructure.values = int16(pixValues);
 %%
 if nargout > 2
     LegacyCellVals = cell(double(T), double(S));

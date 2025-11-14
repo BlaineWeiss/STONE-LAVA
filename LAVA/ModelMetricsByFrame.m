@@ -45,7 +45,7 @@ else
 end
 nRows = size(coordx,1);
 nCols = size(coordx,2);
-Allvalid = true(nCols,1);
+Allvalid = true(nCols,1)';
 for stack = 1 : size(aDialine2,3)
     testbinn = aDialine2(:,:,stack);    %%%%Maybe shouldn't be an app variable (only 1 frame at a time)
     rpix = sum(testbinn,1);
@@ -99,7 +99,8 @@ for stack = 1 : size(aDialine2,3)
 cols  = 1:length(midline);
 
 valid = midline > 10 & midline <= nRows & ~isnan(midline) & indpoint > 5 & indpoint < 50 & endpoint < 95 & endpoint >50;
-Allvalid = Allvalid & valid;
+%Allvalid = Allvalid & valid;
+Allvalid(stack,1:length(valid)) = valid;
 %midline(:) to midline(valid)
 %GAP COMPATABLITY
 %Unevenly distributes NOT GOOD
@@ -178,7 +179,8 @@ for stack = 1 : size(aDialine2,3)
     indexingsections(:,stack) = idxOriginal; %ia;  %used for consistant cross sections (ranked analysis)
 end
 indexingsections = round(mean(indexingsections,2));
-Valid = Allvalid(indexingsections);
+%Allvalid2 = prod(Allvalid,1);
+Valid = Allvalid(:,indexingsections);
 
 areasegmentsamps = zeros(size(midpa,1), size(aDialine2,3));
 parfor stack = 1 : size(aDialine2,3)
@@ -250,9 +252,9 @@ parfor stack = 1 : size(aDialine2,3)
     SkeletonModel{stack} = [xs,ys];
     StartModel{stack} = b;  %coords of start and end of vessel
     EndModel{stack} = be;
-    r1{stack} = arr;
-    r2{stack} = arr2;
-    avgr{stack} = rdist3;
+    r1(:,stack) = arr;
+    r2(:,stack) = arr2;
+    avgr(stack) = rdist3;
 
     rdistum = rdiststore3 .* scaleum;
     area = rdistum .^2 * pi;
