@@ -17,7 +17,7 @@ function [coeff, explained, meanVec] = gpuBatchedPCA(data, batchSize, numCompone
 
     [N, D] = size(data);
 
-    % Step 1: Compute global mean (CPU)
+  
     fprintf("Computing mean over all data (in batches)...\n");
     meanSum = zeros(1, D);
     totalRows = 0;
@@ -31,7 +31,7 @@ function [coeff, explained, meanVec] = gpuBatchedPCA(data, batchSize, numCompone
 
     meanVec = meanSum / totalRows;
 
-    % Step 2: Accumulate covariance matrix on GPU
+  
     fprintf("Accumulating covariance matrix on GPU...\n");
     covMat = gpuArray.zeros(D, D);
 
@@ -44,7 +44,6 @@ function [coeff, explained, meanVec] = gpuBatchedPCA(data, batchSize, numCompone
 
     covMat = covMat / (totalRows - 1);  % final covariance
 
-    % Step 3: Eigendecomposition (on CPU for stability)
     fprintf("Computing eigendecomposition...\n");
     covMat_cpu = gather(covMat);
     [V, S] = eig(covMat_cpu);
